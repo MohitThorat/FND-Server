@@ -1,2 +1,7 @@
-Django
-jellyfish
+asgiref==3.2.10
+Django==3.0.8
+djangorestframework==3.11.0
+mysqlclient @ file:///D:/Django%20Projects/FNDServer/mysqlclient-1.3.13-cp37-cp37m-win32.whl
+pytz==2020.1
+sqlparse==0.3.1
+textdistance==4.2.0

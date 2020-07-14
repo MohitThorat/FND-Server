@@ -7,4 +7,5 @@ class FNDSerializer(serializers.ModelSerializer):
         fields = ['id', 'fake_text','feedback_one','feedback_two']
 
 
-class TextSerializer():
+class TextSerializer(serializers.Serializer):
+    fake_text = serializers.CharField()

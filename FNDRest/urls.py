@@ -21,6 +21,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 urlpatterns = [
     path('faketexts/', views.faketext_list),
     path('faketexts/<int:pk>/', views.faketext_detail),
+    path('detect/', views.fakeTextDetect)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

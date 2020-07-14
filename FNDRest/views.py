@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from FNDRest.models import FakeText
-from FNDRest.serializers import FNDSerializer
+from FNDRest.serializers import FNDSerializer,TextSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -52,11 +52,33 @@ def faketext_detail(request, pk,format = None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['POST'])
-def fakeTextDetect():
+def fakeTextDetect(request,format = None):
 
-    all_data = FakeText.objects.all()
+    serializer = TextSerializer(data = request.data)
+    if serializer.is_valid():
+        # print()
+        # print(serializer)
+        all_data = FakeText.objects.all()
+        max_similarity = -1
+        feedback_1 = ""
+        feedback_2 = ""
+        for data in all_data:
+            similarity = textdistance.ratcliff_obershelp(serializer.data['fake_text'],data.fake_text)
+            if max_similarity < similarity:
+                max_similarity = similarity
+                feedback_1 = data.feedback_one
+                feedback_2 = data.feedback_two
 
-    for data in all_data:
-        textdistance.ratcliff_obershelp(,data.fake_text)
+
+        if max_similarity*100 > 60:
+            #Most likely fake news.
+            content = {'Description': 'Strong Likeley hood of fake news.', 'Feedback 1':feedback_1, 'Feedback 2': feedback_2}
+            return Response(content,status=status.HTTP_200_OK)
+
+        #Less likely fake news
+        content = {'Description': 'Less Likeley hood of fake news.'}
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
