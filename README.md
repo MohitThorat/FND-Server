@@ -9,4 +9,5 @@ To use this project follow these steps.
 3) Clone the repository in the virtual environment.
 4) Run ``` pip install -r requirements.txt``` to install packages.
 5) You also need to have a MySQL database running at 3306 (Check settings.py for more details).
-6) Run the project using ```python manage.py runserver```
+6) Use the .sql file provided to create the database. Alternatively, you can also run ```python manage.py makemigrations``` and ```python manage.py migrate```. Though you won't any data.
+7) Run the project using ```python manage.py runserver```
