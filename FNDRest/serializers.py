@@ -9,3 +9,5 @@ class FNDSerializer(serializers.ModelSerializer):
 
 class TextSerializer(serializers.Serializer):
     fake_text = serializers.CharField()
+
+

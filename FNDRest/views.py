@@ -22,6 +22,7 @@ def faketext_list(request,format = None):
         serializer = FNDSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -53,11 +54,10 @@ def faketext_detail(request, pk,format = None):
 
 @api_view(['POST'])
 def fakeTextDetect(request,format = None):
-
+    print(request.data)
     serializer = TextSerializer(data = request.data)
     if serializer.is_valid():
-        # print()
-        # print(serializer)
+
         all_data = FakeText.objects.all()
         max_similarity = -1
         feedback_1 = ""
@@ -69,16 +69,20 @@ def fakeTextDetect(request,format = None):
                 feedback_1 = data.feedback_one
                 feedback_2 = data.feedback_two
 
+        print(max_similarity)
 
-        if max_similarity*100 > 60:
+        #if text is more than 50% similar then
+        if max_similarity*100 > 50:
+        
             #Most likely fake news.
-            content = {'Description': 'Strong Likeley hood of fake news.', 'Feedback 1':feedback_1, 'Feedback 2': feedback_2}
+            content = {'Description': 'Strong Likeley hood of fake news.', 'Feedback_1':feedback_1, 'Feedback_2': feedback_2}
             return Response(content,status=status.HTTP_200_OK)
 
         #Less likely fake news
         content = {'Description': 'Less Likeley hood of fake news.'}
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(content,status=status.HTTP_200_OK)
     
+    print(serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
